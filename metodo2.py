@@ -1,7 +1,11 @@
 import pygame
 from pygame.locals import *
 from pygame.sprite import Sprite
+from random import randint
+from sys import exit
+import sys
 
+pygame.init()
 # Constantes
 WIDTH = 1300
 HEIGHT = 650
@@ -35,14 +39,18 @@ def imagen(filename, transparent=False):
 
 class Personaje(Sprite):
     def __init__(self):
-        self.image = personaje = pygame.image.load("Personajes/combo.png").convert_alpha()
+        self.image = personaje = pygame.image.load("Personajes/goku.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.move_ip(50, 300)
         self.muerto = 0
+        self.sonidoDisparo= pygame.mixer.Sound("disparo.wav")#caraga del sonido del evento de disparo
+        
     def update(self):
         teclas = pygame.key.get_pressed()
         if teclas[K_SPACE]:
             self.image = personaje = pygame.image.load("Personajes/gokukamehameha.png").convert_alpha()
+            self.sonidoDisparo.play()#Ejecucion al momento de evento
+            
         elif kamehameha.rect.x > 860:
             self.image = personaje = pygame.image.load("Personajes/goku.png").convert_alpha()
 
@@ -106,10 +114,14 @@ class Minicell(Sprite):
         self.rect.move_ip(750, 300)
         self.bandera = 0
         self.muerto = 0
+        self.sonidoDisparo2= pygame.mixer.Sound("disparo.wav")#caraga del sonido del evento de disparo
+        
     def update(self):
         teclas = pygame.key.get_pressed()
         if teclas[K_e]:
-            self.image = personaje = pygame.image.load("Personajes/disparominicell.png").convert_alpha()
+            self.image = personaje = pygame.image.load("Personajes/minicell.png").convert_alpha()
+            self.sonidoDisparo2.play()
+            
         elif kamehameha.rect.x > 860:
             self.image = personaje = pygame.image.load("Personajes/minicell.png").convert_alpha()
 
@@ -163,7 +175,10 @@ class Barravidaminicell(Sprite):
 if __name__ == '__main__':
     # Variables.
     salir = False
-
+    #musica
+    pygame.mixer.music.set_volume(0.9) #Configuracion del Volumen
+    pygame.mixer.music.load("fighter.mp3") #Carga de mp3 sonido de fondo
+    pygame.mixer.music.play(100) #Numero de veces de reproduccion del sonido
     # Establezco la pantalla.
     screen = pygame.display.set_mode((800,600))
 
@@ -223,4 +238,7 @@ if __name__ == '__main__':
         # gestion de eventos
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
-                salir = True
+                    salir = True
+                    #ptotal()
+                    pygame.quit() #detenemos todos los modulos
+                    sys.exit()
